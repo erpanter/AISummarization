@@ -1,0 +1,13 @@
+fastapi==0.111.0
+uvicorn==0.30.0          # ← no [standard]
+python-multipart==0.0.9
+google-generativeai==0.8.5
+pypdf==4.2.0
+python-docx==1.1.2
+python-dotenv==1.0.1
+transformers==4.42.4
+torch>=2.1.0
+tqdm==4.66.4
+watchgod==0.8.2          # optional: pure-Python reloader
+requests==2.31.0
+gdown ==4.7.2

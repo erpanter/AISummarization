@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Summarizer (BERT NER → Gemini)</title>
+  <style>
+    :root { --border:#e5e7eb; --muted:#6b7280; --bg:#f8fafc; }
+    body { font-family: ui-sans-serif, system-ui, -apple-system; margin: 20px; background: var(--bg); }
+    h1 { margin: 0 0 6px; }
+    .muted { color: var(--muted); font-size: .95rem; }
+    .card { background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:16px; box-shadow:0 1px 8px rgba(0,0,0,.04)}
+    .btn { padding:.7rem 1rem;border-radius:10px;border:0;background:#111;color:#fff;cursor:pointer }
+    .btn[disabled]{ opacity:.6;cursor:not-allowed }
+    .uploader { border:2px dashed var(--border);border-radius:14px;padding:26px;text-align:center;background:#fff }
+    .uploader.drag { border-color:#111; background:#f1f5f9 }
+    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap }
+    progress { width:240px; height:12px }
+    pre { white-space:pre-wrap; font-family: ui-monospace, Menlo, Consolas, monospace }
+    ol { padding-left: 1.2rem }
+    .pill { display:inline-block; padding:.2rem .5rem; border:1px solid var(--border); border-radius:999px; font-size:.8rem; color:#111; background:#fff }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AI Summarizer</h1>
+    <p class="muted">Upload a PDF or DOCX. We’ll use BERT NER to chunk by context, then Gemini to summarize.</p>
+  </header>
+
+  <div class="card">
+    <div id="drop" class="uploader" tabindex="0">
+      <strong>Drag & drop</strong> your file here (PDF/DOCX) or
+      <input id="file" type="file" accept=".pdf,.docx" />
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button id="btn" class="btn">Upload & Summarize</button>
+      <progress id="prog" max="100" value="0" style="display:none;"></progress>
+      <span id="status" class="muted"></span>
+      <span id="meta" class="pill" style="display:none;"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Final Summary</h2>
+    <pre id="final"></pre>
+    <div class="row">
+      <button id="download" class="btn" style="display:none;">Download Summary</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Chunk Summaries</h3>
+    <ol id="chunks"></ol>
+  </div>
+
+<script>
+const fileInput = document.getElementById('file');
+const drop = document.getElementById('drop');
+const btn = document.getElementById('btn');
+const prog = document.getElementById('prog');
+const statusEl = document.getElementById('status');
+const finalEl = document.getElementById('final');
+const chunksEl = document.getElementById('chunks');
+const downloadBtn = document.getElementById('download');
+const metaEl = document.getElementById('meta');
+
+let currentFile = null;
+
+function setStatus(msg){ statusEl.textContent = msg || ""; }
+function setBusy(b){
+  btn.disabled = b;
+  prog.style.display = b ? 'inline-block' : 'none';
+  if (!b) prog.value = 0;
+}
+function setFile(file){
+  currentFile = file;
+  metaEl.style.display = file ? 'inline-block' : 'none';
+  metaEl.textContent = file ? `${file.name} • ${(file.size/1024/1024).toFixed(2)} MB` : "";
+}
+
+drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.classList.add('drag'); });
+drop.addEventListener('dragleave', ()=> drop.classList.remove('drag'));
+drop.addEventListener('drop', (e)=>{
+  e.preventDefault(); drop.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) { fileInput.files = e.dataTransfer.files; setFile(f); }
+});
+fileInput.addEventListener('change', ()=> setFile(fileInput.files[0] || null));
+
+btn.addEventListener('click', async ()=>{
+  const file = fileInput.files[0];
+  if (!file) return alert("Pick a PDF or DOCX first 🙏");
+
+  finalEl.textContent = ""; chunksEl.innerHTML = ""; downloadBtn.style.display = "none";
+  setBusy(true); setStatus("Uploading...");
+
+  const fd = new FormData(); fd.append("file", file);
+
+  try {
+    // fake progress during upload (fetch doesn't expose upload progress)
+    let t = 0; const timer = setInterval(()=>{ t = Math.min(100, t+10); prog.value = t; }, 180);
+    const res = await fetch("/api/summarize", { method: "POST", body: fd });
+    clearInterval(timer);
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({detail:res.statusText}));
+      throw new Error(err.detail || "Request failed");
+    }
+    setStatus("Summarizing...");
+    const data = await res.json();
+    setStatus("Done.");
+    finalEl.textContent = data.final_summary || "(no summary)";
+    (data.chunks || []).forEach((c,i)=>{
+      const li = document.createElement('li'); li.textContent = c; chunksEl.appendChild(li);
+    });
+    // enable download
+    downloadBtn.style.display = "inline-block";
+    downloadBtn.onclick = ()=>{
+      const blob = new Blob([data.final_summary || ""], {type:"text/plain;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = (file.name.replace(/\.(pdf|docx)$/i,"") || "summary") + "_summary.txt";
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    };
+  } catch(e) {
+    console.error(e);
+    alert("Error: " + e.message);
+    setStatus("Failed.");
+  } finally {
+    setBusy(false);
+  }
+});
+</script>
+</body>
+</html>

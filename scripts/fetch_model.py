@@ -1,4 +1,3 @@
-# scripts/fetch_model.py
 from __future__ import annotations
 from pathlib import Path
 import os, zipfile, shutil, hashlib, time

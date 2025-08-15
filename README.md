@@ -13,7 +13,7 @@ This solution aims to minimise the amount of data lost when chunking long docume
    `.\.venv\Scripts\Activate.ps1`
 2. Install Dependencies
    `pip install -r requirements.txt`
-3. Add env with the following variables (you can get the model zip url from GitHub releases in this repository):
+3. Add env with the following variables (you can get the model zip url from GitHub releases in this repository by going to ner_bert_gmb.zip):
    `GEMINI_API_KEY` `MODEL_ZIP_URL`
 4. Run web application (side note: you can use main.py to debug the backend by using `python main.py`):
    `uvicorn app.app:app --reload`

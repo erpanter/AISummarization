@@ -7,4 +7,6 @@ __pycache__/
 # .env
 .env
 models/
-data/processed/
+
+# Ignore processed data
+processed/

@@ -52,7 +52,7 @@ def _startup():
         id2label_path=str(ID2LABEL),
     )
     # Gemini client
-    gem = GeminiSummarizer(model="gemini-1.5-flash", temperature=0.2)
+    gem = GeminiSummarizer()
 
 class SummarizeResponse(BaseModel):
     final_summary: str

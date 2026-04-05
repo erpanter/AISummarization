@@ -1,0 +1,107 @@
+:root {
+  --bg: #0f172a;
+  --accent: #6366f1;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: rgba(255,255,255,0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 24px clamp(16px, 5vw, 48px);
+}
+
+h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+
+.muted { color: var(--muted); margin-top: 6px; }
+
+main {
+  flex: 1;
+  padding: 20px clamp(16px, 5vw, 48px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  main { grid-template-columns: 1fr 1fr; }
+}
+
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  transition: 0.2s;
+  background: rgba(255,255,255,0.02);
+}
+
+.upload-area.drag {
+  border-color: var(--accent);
+  background: rgba(99,102,241,0.1);
+}
+
+input[type="file"] { margin-top: 10px; color: var(--muted); }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+progress { height: 10px; width: 180px; }
+
+.pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  font-size: 0.8rem;
+}
+
+.panel {
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+pre { white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+ol { padding-left: 18px; }
+
+.skeleton {
+  background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-line { height: 12px; margin-bottom: 10px; }

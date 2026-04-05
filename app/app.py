@@ -119,8 +119,4 @@ async def summarize(file: UploadFile = File(...)):
 def index():
     return FileResponse(PROJECT_ROOT / "app" / "static" / "index.html")
 
-app.mount(
-    "/static",
-    StaticFiles(directory=PROJECT_ROOT / "app" / "static"),
-    name="static",
-)
+app.mount("/static", StaticFiles(directory=PROJECT_ROOT / "app" / "static"), name="static")

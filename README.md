@@ -10,7 +10,7 @@ This solution aims to minimise the amount of data lost when chunking long docume
 ## Quickstart
 1. Create and activate a venv:
    `py -3.11 -m venv .venv`
-   `.\.venv\Scripts\Activate.ps1`
+   `.\.venv\Scripts\Activate.ps1` (`source .venv/bin/activate` if on mac)
 2. Install Dependencies
    `pip install -r requirements.txt`
 3. Add a `.env` file with the following variables written in a string format (you can get the model zip url from GitHub releases in this repository by going to ner_bert_gmb.zip):

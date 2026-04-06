@@ -8,6 +8,7 @@ const chunksEl = document.getElementById('chunks');
 const downloadBtn = document.getElementById('download');
 const metaEl = document.getElementById('meta');
 const skeletonFinal = document.getElementById('skeleton-final');
+const fileName = document.getElementById('file-name');
 
 function setStatus(msg){ statusEl.textContent = msg || ""; }
 function setBusy(b){
@@ -28,7 +29,9 @@ function setFile(file){
    if (f) { fileInput.files = e.dataTransfer.files; setFile(f); }
  });
 
-fileInput.addEventListener('change', () => setFile(fileInput.files[0] || null));
+fileInput.addEventListener('change', () => {
+  fileName.textContent = fileInput.files[0]?.name || "No file selected";
+});
 
 btn.addEventListener('click', async ()=>{
   const file = fileInput.files[0];

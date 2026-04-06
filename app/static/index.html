@@ -1,55 +1,64 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI Summarizer</title>
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
+
 <body>
 
-<header>
-  <h1>AI Summarizer</h1>
-  <div class="muted">Upload → summarize :)</div>
-</header>
+  <header>
+    <h1>AI Summarizer</h1>
+    <div class="muted">Upload → summarize :)</div>
+  </header>
 
-<main>
+  <main>
 
-  <section>
-    <div id="drop" class="upload-area">
-      <strong>Drop your PDF/DOCX</strong><br/>
-      or
-      <div>
-        <input id="file" type="file" accept=".pdf,.docx" />
+    <section>
+      <div id="drop" class="upload-area">
+        <strong>Drop your PDF/DOCX</strong><br />
+        <div class="file-wrapper">
+          <span>or</span>
+
+          <label class="file-btn">
+            Choose File
+            <input id="file" type="file" accept=".pdf,.docx" />
+          </label>
+
+          <span id="file-name" class="muted">No file selected</span>
+        </div>
       </div>
-    </div>
 
-    <div class="controls">
-      <button id="btn">Summarize</button>
-      <progress id="prog" max="100" value="0" style="display:none"></progress>
-      <span id="status" class="muted"></span>
-      <span id="meta" class="pill" style="display:none"></span>
-    </div>
-  </section>
+      <div class="controls">
+        <button id="btn">Summarize</button>
+        <progress id="prog" max="100" value="0" style="display:none"></progress>
+        <span id="status" class="muted"></span>
+        <span id="meta" class="pill" style="display:none"></span>
+      </div>
+    </section>
 
-  <section class="panel">
-    <h3>Final Summary</h3>
-    <div id="skeleton-final" style="display:none">
-      <div class="skeleton skeleton-line"></div>
-      <div class="skeleton skeleton-line"></div>
-      <div class="skeleton skeleton-line"></div>
-    </div>
-    <pre id="final"></pre>
-    <button id="download" style="display:none;margin-top:10px">Download</button>
-  </section>
+    <section class="panel">
+      <h3>Final Summary</h3>
+      <div id="skeleton-final" style="display:none">
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line"></div>
+      </div>
+      <pre id="final"></pre>
+      <button id="download" style="display:none;margin-top:10px">Download</button>
+    </section>
 
-  <section class="panel" style="grid-column: 1 / -1;">
-    <h3>Chunk Breakdown</h3>
-    <ol id="chunks"></ol>
-  </section>
+    <section class="panel" style="grid-column: 1 / -1;">
+      <h3>Chunk Breakdown</h3>
+      <ol id="chunks"></ol>
+    </section>
 
-</main>
+  </main>
 
-<script src="/static/script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
+
 </html>

@@ -6,7 +6,9 @@
   --border: rgba(255,255,255,0.08);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -18,13 +20,23 @@ body {
   flex-direction: column;
 }
 
+/* ---------- HEADER ---------- */
+
 header {
   padding: 24px clamp(16px, 5vw, 48px);
 }
 
-h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
 
-.muted { color: var(--muted); margin-top: 6px; }
+.muted {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ---------- LAYOUT ---------- */
 
 main {
   flex: 1;
@@ -35,16 +47,20 @@ main {
 }
 
 @media (min-width: 900px) {
-  main { grid-template-columns: 1fr 1fr; }
+  main {
+    grid-template-columns: 1fr 1fr;
+  }
 }
+
+/* ---------- UPLOAD AREA ---------- */
 
 .upload-area {
   border: 2px dashed var(--border);
   border-radius: 16px;
   padding: 40px 20px;
   text-align: center;
-  transition: 0.2s;
   background: rgba(255,255,255,0.02);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,56 +72,80 @@ main {
   background: rgba(99,102,241,0.1);
 }
 
-input[type="file"] {
-  text-align: center;
-}
+/* ---------- FILE INPUT (IMPORTANT PART) ---------- */
 
 .file-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 0px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .file-wrapper input[type="file"] {
-  display: block;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.file-input-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .file-btn {
   background: var(--accent);
-  padding: 10px 16px;
-  border-radius: 10px;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 12px;
   cursor: pointer;
   display: inline-block;
-  position: relative;
-  overflow: hidden;
-  color: white;
+  transition: 0.2s;
 }
 
-.file-btn:hover {  
-  transform: translateY(-1px);
-  opacity: 0.9;
+.file-btn:hover {
+  opacity: 0.85;
 }
 
-.file-btn input {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0.0001; /* NOT 0 (Safari bug) */
-  cursor: pointer;
-}
+/* DO NOT hide input */
 
 #file {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
+
+input[type="file"] {
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Style button part (cross-browser) */
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: 0.2s;
+}
+
+/* Hover */
+input[type="file"]::file-selector-button:hover,
+input[type="file"]::-webkit-file-upload-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+#file-name {
+  display: none;
+  align-items: center;
+}
+
+/* ---------- CONTROLS ---------- */
 
 .controls {
   display: flex;
@@ -122,11 +162,27 @@ button {
   padding: 10px 16px;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
-button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 
-progress { height: 10px; width: 180px; }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- PROGRESS ---------- */
+
+progress {
+  height: 10px;
+  width: 180px;
+}
+
+/* ---------- META PILL ---------- */
 
 .pill {
   padding: 4px 10px;
@@ -135,6 +191,8 @@ progress { height: 10px; width: 180px; }
   font-size: 0.8rem;
 }
 
+/* ---------- PANELS ---------- */
+
 .panel {
   background: rgba(255,255,255,0.03);
   border-radius: 16px;
@@ -142,8 +200,19 @@ progress { height: 10px; width: 180px; }
   border: 1px solid var(--border);
 }
 
-pre { white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
-ol { padding-left: 18px; }
+/* ---------- TEXT ---------- */
+
+pre {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+ol {
+  padding-left: 18px;
+}
+
+/* ---------- SKELETON (optional) ---------- */
 
 .skeleton {
   background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
@@ -157,4 +226,7 @@ ol { padding-left: 18px; }
   100% { background-position: 200% 0; }
 }
 
-.skeleton-line { height: 12px; margin-bottom: 10px; }
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 10px;
+}

@@ -30,7 +30,14 @@ function setFile(file){
  });
 
 fileInput.addEventListener('change', () => {
-  fileName.textContent = fileInput.files[0]?.name || "No file selected";
+  const file = fileInput.files[0];
+
+  if (file) {
+    fileName.textContent = file.name;
+    fileName.style.display = "block";
+  } else {
+    fileName.style.display = "none";
+  }
 });
 
 btn.addEventListener('click', async ()=>{

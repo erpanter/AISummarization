@@ -9,25 +9,26 @@ const downloadBtn = document.getElementById('download');
 const metaEl = document.getElementById('meta');
 const skeletonFinal = document.getElementById('skeleton-final');
 const fileName = document.getElementById('file-name');
+const skeletonChunks = document.getElementById('skeleton-chunks');
 
-function setStatus(msg){ statusEl.textContent = msg || ""; }
-function setBusy(b){
+function setStatus(msg) { statusEl.textContent = msg || ""; }
+function setBusy(b) {
   btn.disabled = b;
   prog.style.display = b ? 'inline-block' : 'none';
   if (!b) prog.value = 0;
 }
-function setFile(file){
+function setFile(file) {
   metaEl.style.display = file ? 'inline-block' : 'none';
-  metaEl.textContent = file ? `${file.name} • ${(file.size/1024/1024).toFixed(2)} MB` : "";
+  metaEl.textContent = file ? `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} MB` : "";
 }
 
- drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
- drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
- drop.addEventListener('drop', e => {
-   e.preventDefault(); drop.classList.remove('drag');
-   const f = e.dataTransfer.files[0];
-   if (f) { fileInput.files = e.dataTransfer.files; setFile(f); }
- });
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+drop.addEventListener('drop', e => {
+  e.preventDefault(); drop.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) { fileInput.files = e.dataTransfer.files; setFile(f); }
+});
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files[0];
@@ -40,12 +41,13 @@ fileInput.addEventListener('change', () => {
   }
 });
 
-btn.addEventListener('click', async ()=>{
+btn.addEventListener('click', async () => {
   const file = fileInput.files[0];
   if (!file) return alert("Pick a file first 😭");
 
   finalEl.textContent = "";
   chunksEl.innerHTML = "";
+  skeletonChunks.style.display = "block";
   downloadBtn.style.display = "none";
 
   skeletonFinal.style.display = 'block';
@@ -67,6 +69,8 @@ btn.addEventListener('click', async ()=>{
 
     finalEl.textContent = data.final_summary || "(empty)";
 
+    skeletonChunks.style.display = "none";
+
     (data.chunks || []).forEach(c => {
       const li = document.createElement('li');
       li.textContent = c;
@@ -75,7 +79,7 @@ btn.addEventListener('click', async ()=>{
 
     downloadBtn.style.display = "inline-block";
     downloadBtn.onclick = () => {
-      const blob = new Blob([data.final_summary || ""], {type:"text/plain"});
+      const blob = new Blob([data.final_summary || ""], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -87,6 +91,7 @@ btn.addEventListener('click', async ()=>{
 
   } catch (e) {
     skeletonFinal.style.display = 'none';
+    skeletonChunks.style.display = "none";
     alert(e.message);
     setStatus("Error");
   } finally {

@@ -230,3 +230,15 @@ ol {
   height: 12px;
   margin-bottom: 10px;
 }
+
+#skeleton-chunks .skeleton-line {
+  height: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+/* make it look more natural (different widths) */
+#skeleton-chunks .skeleton-line:nth-child(1) { width: 90%; }
+#skeleton-chunks .skeleton-line:nth-child(2) { width: 75%; }
+#skeleton-chunks .skeleton-line:nth-child(3) { width: 85%; }
+#skeleton-chunks .skeleton-line:nth-child(4) { width: 60%; }
